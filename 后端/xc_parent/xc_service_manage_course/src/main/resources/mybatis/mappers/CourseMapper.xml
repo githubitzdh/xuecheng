@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.czxy.xuecheng.manage_course.dao.CourseMapper">
+
+<!--    <select id="findCourseListPage" parameterType="com.czxy.xuecheng.domain.course.request.CourseListRequest"
+resultMap="com.czxy.xuecheng.domain.course.ext.CourseInfo">
+
+ <select id="findCourseListPage"
+        parameterType="别名"
+        resultType="别名">
+-->
+    <select id="findCourseListPage" parameterType="CourseListRequest"
+            resultType="CourseInfo">
+        SELECT
+         cb.*, (SELECT pic FROM course_pic WHERE courseid = cb.id) pic
+        FROM course_base cb
+        WHERE cb.company_id = #{companyId}
+    </select>
+</mapper>

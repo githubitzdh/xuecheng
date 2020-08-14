@@ -1,0 +1,9 @@
+spring:
+  freemarker:
+    settings:
+      classic_compatible: true       #兼容模式
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/demo
+server:
+  port: 8088 #服务端口

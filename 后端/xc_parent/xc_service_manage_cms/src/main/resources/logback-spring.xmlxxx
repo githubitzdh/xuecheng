@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+logback-spring.xml 为spring提供专有日志配置文件
+
+debug：调试，对应的方法 debug()
+info：信息（正常运行），对应的方法 info()
+warn：警告，对应的方法warn()
+error：错误，对应的方法error()
+
+顺序：
+debug -> info -> warn -> error
+debug级别：将执行 debug()、info()、warn()、error()
+info级别：将执行 info()、warn()、error()
+warn级别：将执行 warn()、error()
+
+-->
+<configuration>
+    <!--定义日志文件的存储地址,使用绝对路径-->
+    <property name="LOG_HOME" value="e:/logs"/>
+
+    <!-- Console 输出设置 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <charset>utf8</charset>
+        </encoder>
+    </appender>
+
+    <!-- 按照每天生成日志文件 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名-->
+            <fileNamePattern>${LOG_HOME}/xc.%d{yyyy-MM-dd}.log</fileNamePattern>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 异步输出 -->
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢失日志.默认的,如果队列的80%已满,则会丢弃TRACT、DEBUG、INFO级别的日志 -->
+        <discardingThreshold>0</discardingThreshold>
+        <!-- 更改默认的队列的深度,该值会影响性能.默认值为256 -->
+        <queueSize>512</queueSize>
+        <!-- 添加附加的appender,最多只能添加一个 -->
+        <appender-ref ref="FILE"/>
+    </appender>
+
+
+    <logger name="org.apache.ibatis.cache.decorators.LoggingCache" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="org.springframework.boot" level="DEBUG"/>
+<!--    <logger name="org.springframework.boot" level="info"/>-->
+<!--  <root level=" "> 用于配置全局日志级别-->
+    <root level="info">
+<!--      <appender-ref ref=""/> 用于配置输出位置   -->
+
+        <!--<appender-ref ref="ASYNC"/>-->
+
+<!--    <appender-ref ref="file"> 将日志输出到指定的文件    -->
+        <appender-ref ref="FILE"/>
+<!--        <appender-ref ref="console">将日志输出到控制台-->
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
